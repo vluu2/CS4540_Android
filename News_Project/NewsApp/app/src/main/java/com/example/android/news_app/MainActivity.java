@@ -15,6 +15,7 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     private TextView mNewsTextView;
+    private URL newsUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,34 +23,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mNewsTextView = (TextView) findViewById(R.id.news_data);
+        newsUrl = NetworkUtils.buildUrl();
 
+        loadNewsData();
     }
 
     private void loadNewsData() {
         new FetchNewsTask().execute();
     }
 
-    private class FetchNewsTask extends AsyncTask<String, Void, String> {
+    private class FetchNewsTask extends AsyncTask<URL, Void, String> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(URL... params) {
 
-            if (params.length == 0) {
-                return null;
-            }
-            String stringQuery = params[0];
-            URL newsRequestUrl = NetworkUtils.buildUrl(stringQuery);
-
-            String jsonNewsDataResponse = null;
+            String result = null;
 
             try {
-                jsonNewsDataResponse = NetworkUtils.getResponseFromHttpUrl(newsRequestUrl);
+                result = NetworkUtils.getResponseFromHttpUrl(newsUrl);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return jsonNewsDataResponse;
+            return result;
         }
 
         @Override

@@ -29,9 +29,9 @@ public final class NetworkUtils {
 
     private final static String QUERY_PARAM_APIKEY = "apiKey";
     /* Insert Real API key here */
-    private final static String apikey = " Insert your api key here ";
+    private final static String apikey = " Insert API key here ";
 
-    public static URL buildUrl(String searchQuery) {
+    public static URL buildUrl() {
         Uri builtUri = Uri.parse(NEWS_BASE_URL).buildUpon().
                 appendQueryParameter(QUERY_PARAM_SOURCE, source).
                 appendQueryParameter(QUERY_PARAM_SORTBY, sortby).
