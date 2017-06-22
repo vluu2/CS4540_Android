@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.android.news_app.utilities.NetworkUtils;
-import com.example.android.news_app.utilities.OpenNewsJsonUtils;
 
 import java.net.URL;
 
@@ -24,47 +23,39 @@ public class MainActivity extends AppCompatActivity {
 
         mNewsTextView = (TextView) findViewById(R.id.news_data);
 
-        /* Once all of our views are setup, we can load the news data. */
-        loadNewsData();
-
     }
 
     private void loadNewsData() {
         new FetchNewsTask().execute();
     }
 
-    public class FetchNewsTask extends AsyncTask<String, Void, String[]> {
+    private class FetchNewsTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected String[] doInBackground(String... params) {
+        protected String doInBackground(String... params) {
 
             if (params.length == 0) {
                 return null;
             }
+            String stringQuery = params[0];
+            URL newsRequestUrl = NetworkUtils.buildUrl(stringQuery);
 
-            String searchQuery = params[0];
-            URL newsRequestUrl = NetworkUtils.buildUrl(searchQuery);
+            String jsonNewsDataResponse = null;
 
             try {
-                String jsonNewsResponse = NetworkUtils
-                        .getResponseFromHttpUrl(newsRequestUrl);
+                jsonNewsDataResponse = NetworkUtils.getResponseFromHttpUrl(newsRequestUrl);
 
-                String[] simpleJsonNewsData = OpenNewsJsonUtils
-                        .getSimpleNewsStringsFromJson(MainActivity.this, jsonNewsResponse);
-
-                return simpleJsonNewsData;
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
             }
+
+            return jsonNewsDataResponse;
         }
 
         @Override
-        protected void onPostExecute(String[] newsData) {
+        protected void onPostExecute(String newsData) {
             if (newsData != null) {
-                for (String newsString : newsData) {
-                    mNewsTextView.append((newsString) + "\n\n\n");
-                }
+                mNewsTextView.setText(newsData);
             }
         }
     }

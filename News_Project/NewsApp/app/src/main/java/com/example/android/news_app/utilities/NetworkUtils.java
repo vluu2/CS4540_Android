@@ -29,7 +29,7 @@ public final class NetworkUtils {
 
     private final static String QUERY_PARAM_APIKEY = "apiKey";
     /* Insert Real API key here */
-    private final static String apikey = "insert api key here ";
+    private final static String apikey = " Insert your api key here ";
 
     public static URL buildUrl(String searchQuery) {
         Uri builtUri = Uri.parse(NEWS_BASE_URL).buildUpon().
